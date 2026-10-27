@@ -1,5 +1,8 @@
 @if (booking(); as b) {
-  <h1>Your appointment is booked</h1>
+  <div class="page-hero">
+    <h1>Your appointment is booked</h1>
+    <p class="lede">We look forward to seeing you at the branch.</p>
+  </div>
   <section class="card" aria-labelledby="ref-heading">
     <h2 id="ref-heading" class="visually-hidden">Booking details</h2>
     <p class="hint">Your reference</p>
@@ -31,11 +34,13 @@
     <a class="btn secondary" routerLink="/book">Book another</a>
   </div>
 } @else {
-  <h1>No booking to show</h1>
-  <p>
-    This page only appears right after you book. If you already have a booking, look it up with
-    your reference.
-  </p>
+  <div class="page-hero">
+    <h1>No booking to show</h1>
+    <p class="lede">
+      This page only appears right after you book. If you already have a booking, look it up with
+      your reference.
+    </p>
+  </div>
   <div class="actions">
     <a class="btn primary" routerLink="/manage">Find a booking</a>
     <a class="btn secondary" routerLink="/book">Book an appointment</a>

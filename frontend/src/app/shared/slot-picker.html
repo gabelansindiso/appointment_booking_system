@@ -19,7 +19,7 @@
     <p class="alert" role="alert">{{ e }}</p>
     <button type="button" class="btn secondary" (click)="refresh()">Try again</button>
   } @else if (visibleSlots().length === 0) {
-    <p class="hint">No times are free on this day. Try another date.</p>
+    <p class="hint" style="color: red;">No slots are available on this day. Try another date.</p>
   } @else {
     <ul class="slot-grid" aria-label="Available times">
       @for (s of visibleSlots(); track s.start) {
