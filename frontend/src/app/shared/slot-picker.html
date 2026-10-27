@@ -1,0 +1,40 @@
+<div class="field">
+  <label for="slot-date">Date</label>
+  <input
+    id="slot-date"
+    type="date"
+    [min]="minDate()"
+    [max]="maxDate()"
+    [value]="date()"
+    (change)="onDateChange($event)"
+  />
+</div>
+
+<div aria-live="polite">
+  @if (!date()) {
+    <p class="hint">Choose a date to see available times.</p>
+  } @else if (loading()) {
+    <p class="hint">Loading available times…</p>
+  } @else if (error(); as e) {
+    <p class="alert" role="alert">{{ e }}</p>
+    <button type="button" class="btn secondary" (click)="refresh()">Try again</button>
+  } @else if (visibleSlots().length === 0) {
+    <p class="hint">No times are free on this day. Try another date.</p>
+  } @else {
+    <ul class="slot-grid" aria-label="Available times">
+      @for (s of visibleSlots(); track s.start) {
+        <li>
+          <button
+            type="button"
+            class="slot"
+            [class.selected]="s.start === selected()?.start"
+            [attr.aria-pressed]="s.start === selected()?.start"
+            (click)="selected.set(s)"
+          >
+            {{ s.start | zoned: timezone() : 'time' }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

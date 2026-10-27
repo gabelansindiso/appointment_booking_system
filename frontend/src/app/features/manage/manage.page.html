@@ -1,0 +1,134 @@
+<h1>Manage your booking</h1>
+
+@if (notice(); as n) {
+  <p class="notice" role="status">{{ n }}</p>
+}
+@if (error(); as e) {
+  <p class="alert" role="alert">{{ e }}</p>
+}
+
+@if (appointment(); as appt) {
+  <section class="card" aria-labelledby="booking-heading">
+    <h2 id="booking-heading">
+      Booking {{ appt.reference }}
+      <span class="badge" [attr.data-status]="appt.status">{{ statusLabel(appt.status) }}</span>
+    </h2>
+    <dl>
+      <dt>Branch</dt>
+      <dd>{{ appt.branchName }}</dd>
+      <dt>Service</dt>
+      <dd>{{ appt.serviceTypeName }}</dd>
+      <dt>When</dt>
+      <dd>{{ appt.start | zoned: appt.timezone }}</dd>
+      <dt>Name</dt>
+      <dd>{{ appt.customerName }}</dd>
+    </dl>
+
+    @if (appt.status === 'CONFIRMED') {
+      @switch (mode()) {
+        @case ('view') {
+          <div class="actions">
+            <button
+              type="button"
+              class="btn secondary"
+              (click)="startReschedule()"
+              [disabled]="appt.reschedulesRemaining === 0"
+            >
+              Reschedule
+            </button>
+            <button type="button" class="btn danger" (click)="mode.set('confirm-cancel')">
+              Cancel appointment
+            </button>
+          </div>
+          @if (appt.reschedulesRemaining === 0) {
+            <p class="hint">
+              This booking has already been rescheduled the maximum number of times.
+            </p>
+          }
+        }
+        @case ('reschedule') {
+          <h3>Choose a new time</h3>
+          <app-slot-picker
+            [branchId]="appt.branchId"
+            [timezone]="appt.timezone"
+            [excludeStart]="appt.start"
+            [(selected)]="newSlot"
+          />
+          <div class="actions">
+            <button
+              type="button"
+              class="btn primary"
+              (click)="confirmReschedule()"
+              [disabled]="!newSlot() || busy()"
+            >
+              {{ busy() ? 'Saving…' : 'Move appointment' }}
+            </button>
+            <button type="button" class="btn secondary" (click)="backToView()">Back</button>
+          </div>
+        }
+        @case ('confirm-cancel') {
+          <div class="alert warn" role="alert">
+            <p>Cancel this appointment? Your time slot is released and this can't be undone.</p>
+            <div class="actions">
+              <button
+                type="button"
+                class="btn danger"
+                (click)="confirmCancel()"
+                [disabled]="busy()"
+              >
+                {{ busy() ? 'Cancelling…' : 'Cancel appointment' }}
+              </button>
+              <button type="button" class="btn secondary" (click)="backToView()">
+                Keep appointment
+              </button>
+            </div>
+          </div>
+        }
+      }
+    } @else {
+      <div class="actions">
+        <a class="btn primary" routerLink="/book">Book a new appointment</a>
+      </div>
+    }
+  </section>
+
+  <button type="button" class="link" (click)="reset()">Look up another booking</button>
+} @else {
+  <form class="card" [formGroup]="lookupForm" (ngSubmit)="lookup()" novalidate>
+    <p>Enter the reference from your confirmation and the email you booked with.</p>
+
+    <div class="field">
+      <label for="reference">Booking reference</label>
+      <input
+        id="reference"
+        formControlName="reference"
+        placeholder="CAP-XXXXXX"
+        autocapitalize="characters"
+        [attr.aria-invalid]="!!errorMessage(lookupForm.controls.reference, submitted())"
+        aria-describedby="reference-error"
+      />
+      @if (errorMessage(lookupForm.controls.reference, submitted()); as msg) {
+        <p class="error" id="reference-error">{{ msg }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        [attr.aria-invalid]="!!errorMessage(lookupForm.controls.email, submitted())"
+        aria-describedby="email-error"
+      />
+      @if (errorMessage(lookupForm.controls.email, submitted()); as msg) {
+        <p class="error" id="email-error">{{ msg }}</p>
+      }
+    </div>
+
+    <button type="submit" class="btn primary" [disabled]="busy()">
+      {{ busy() ? 'Looking up…' : 'Find booking' }}
+    </button>
+  </form>
+}

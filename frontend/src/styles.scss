@@ -1,0 +1,398 @@
+:root {
+  --bg: #edf0f2;
+  --surface: #ffffff;
+  --text: #15212b;
+  --muted: #536171;
+  --border: #cfd6dd;
+  --accent: #0f5c4d;
+  --accent-hover: #0b4a3e;
+  --on-accent: #ffffff;
+  --danger: #b42318;
+  --danger-bg: #fdeceb;
+  --warn-bg: #fdf3dc;
+  --ok: #0b6b3a;
+  --ok-bg: #e3f4ea;
+  --focus: #0b5fff;
+  --radius: 10px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1419;
+    --surface: #161e25;
+    --text: #e9eef2;
+    --muted: #93a1af;
+    --border: #2b3742;
+    --accent: #52c2a6;
+    --accent-hover: #6fd3b9;
+    --on-accent: #07231c;
+    --danger: #ff8d82;
+    --danger-bg: #3b1d1b;
+    --warn-bg: #3a2f12;
+    --ok: #74dca0;
+    --ok-bg: #12301f;
+    --focus: #8fb0ff;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Avenir Next', 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.container {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+main {
+  padding-top: 2rem;
+  padding-bottom: 2.5rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin: 0 0 0.75rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.lede {
+  color: var(--muted);
+  max-width: 36rem;
+  margin: 0 0 1.5rem;
+}
+
+/* Layout chrome */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header .bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
+
+.brand {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+nav a:hover {
+  color: var(--text);
+}
+
+nav a.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.site-footer {
+  color: var(--muted);
+  font-size: 0.85rem;
+  padding-bottom: 2rem;
+}
+
+/* Surfaces */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin: 0 0 1rem;
+  min-width: 0;
+}
+
+fieldset.card legend {
+  font-weight: 650;
+  padding: 0 0.4rem;
+}
+
+/* Forms */
+.field {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+input[aria-invalid='true'],
+select[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin: 0.3rem 0 0;
+}
+
+.alert {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0 0 1rem;
+}
+
+.alert p {
+  margin: 0 0 0.5rem;
+}
+
+.alert.warn {
+  background: var(--warn-bg);
+  color: var(--text);
+}
+
+.notice {
+  background: var(--ok-bg);
+  color: var(--ok);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0 0 1rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.65rem 1.15rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn.secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn.danger {
+  background: var(--danger);
+  color: var(--surface);
+}
+
+.link {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  padding: 0.5rem 0;
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+/* Slot grid: the memorable part of the interface */
+.slot-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.25rem, 1fr));
+  gap: 0.5rem;
+}
+
+.slot {
+  width: 100%;
+  padding: 0.7rem 0;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.slot:hover {
+  border-color: var(--accent);
+}
+
+.slot.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.selected-summary {
+  margin: 0.75rem 0 0;
+}
+
+/* Booking summary */
+.reference {
+  font-size: 2.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  margin: 0 0 1rem;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.4rem 1.25rem;
+  margin: 0 0 1rem;
+}
+
+dt {
+  color: var(--muted);
+}
+
+dd {
+  margin: 0;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  background: var(--border);
+}
+
+.badge[data-status='CONFIRMED'] {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.badge[data-status='CANCELLED'] {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+@media (max-width: 30rem) {
+  dl {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  dd {
+    margin-bottom: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

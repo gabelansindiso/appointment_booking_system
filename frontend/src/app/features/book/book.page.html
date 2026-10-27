@@ -1,0 +1,129 @@
+<h1>Book a branch appointment</h1>
+<p class="lede">Pick a service, a branch and a time. You'll get a reference to manage it later.</p>
+
+@if (catalogError(); as err) {
+  <div class="alert" role="alert">
+    <p>{{ err }}</p>
+    <button type="button" class="btn secondary" (click)="loadCatalog()">Try again</button>
+  </div>
+} @else if (loadingCatalog()) {
+  <p class="hint">Loading branches…</p>
+} @else {
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <fieldset class="card">
+      <legend>What do you need?</legend>
+
+      <div class="field">
+        <label for="serviceType">Service</label>
+        <select
+          id="serviceType"
+          formControlName="serviceType"
+          [attr.aria-invalid]="!!errorMessage(form.controls.serviceType, submitted())"
+          aria-describedby="serviceType-error"
+        >
+          <option value="" disabled>Select a service</option>
+          @for (t of serviceTypes(); track t.code) {
+            <option [value]="t.code">{{ t.name }}</option>
+          }
+        </select>
+        @if (errorMessage(form.controls.serviceType, submitted()); as msg) {
+          <p class="error" id="serviceType-error">{{ msg }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="branchId">Branch</label>
+        <select
+          id="branchId"
+          formControlName="branchId"
+          [attr.aria-invalid]="!!errorMessage(form.controls.branchId, submitted())"
+          aria-describedby="branchId-error"
+        >
+          <option value="" disabled>Select a branch</option>
+          @for (b of branches(); track b.id) {
+            <option [value]="b.id">{{ b.name }}</option>
+          }
+        </select>
+        @if (branch(); as b) {
+          <p class="hint">{{ b.address }}</p>
+        }
+        @if (errorMessage(form.controls.branchId, submitted()); as msg) {
+          <p class="error" id="branchId-error">{{ msg }}</p>
+        }
+      </div>
+    </fieldset>
+
+    <fieldset class="card">
+      <legend>Pick a time</legend>
+      @if (branch(); as b) {
+        <app-slot-picker [branchId]="b.id" [timezone]="b.timezone" [(selected)]="slot" />
+        @if (slot(); as s) {
+          <p class="selected-summary">
+            Selected: <strong>{{ s.start | zoned: b.timezone }}</strong> at {{ b.name }}
+          </p>
+        } @else if (submitted()) {
+          <p class="error">Choose a time.</p>
+        }
+      } @else {
+        <p class="hint">Choose a branch to see its times.</p>
+      }
+    </fieldset>
+
+    <fieldset class="card">
+      <legend>Your details</legend>
+
+      <div class="field">
+        <label for="customerName">Full name</label>
+        <input
+          id="customerName"
+          formControlName="customerName"
+          autocomplete="name"
+          [attr.aria-invalid]="!!errorMessage(form.controls.customerName, submitted())"
+          aria-describedby="customerName-error"
+        />
+        @if (errorMessage(form.controls.customerName, submitted()); as msg) {
+          <p class="error" id="customerName-error">{{ msg }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="customerEmail">Email</label>
+        <input
+          id="customerEmail"
+          type="email"
+          formControlName="customerEmail"
+          autocomplete="email"
+          [attr.aria-invalid]="!!errorMessage(form.controls.customerEmail, submitted())"
+          aria-describedby="customerEmail-error"
+        />
+        @if (errorMessage(form.controls.customerEmail, submitted()); as msg) {
+          <p class="error" id="customerEmail-error">{{ msg }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="customerPhone">Mobile number</label>
+        <input
+          id="customerPhone"
+          type="tel"
+          formControlName="customerPhone"
+          autocomplete="tel"
+          placeholder="082 123 4567"
+          [attr.aria-invalid]="!!errorMessage(form.controls.customerPhone, submitted())"
+          aria-describedby="customerPhone-error"
+        />
+        @if (errorMessage(form.controls.customerPhone, submitted()); as msg) {
+          <p class="error" id="customerPhone-error">{{ msg }}</p>
+        }
+      </div>
+    </fieldset>
+
+    @if (submitError(); as err) {
+      <p class="alert" role="alert">{{ err }}</p>
+    }
+
+    <button type="submit" class="btn primary" [disabled]="submitting()">
+      {{ submitting() ? 'Booking…' : 'Book appointment' }}
+    </button>
+  </form>
+}

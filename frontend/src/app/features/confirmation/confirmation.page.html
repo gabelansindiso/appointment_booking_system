@@ -1,0 +1,43 @@
+@if (booking(); as b) {
+  <h1>Your appointment is booked</h1>
+  <section class="card" aria-labelledby="ref-heading">
+    <h2 id="ref-heading" class="visually-hidden">Booking details</h2>
+    <p class="hint">Your reference</p>
+    <p class="reference">{{ b.appointment.reference }}</p>
+    <dl>
+      <dt>Branch</dt>
+      <dd>{{ b.appointment.branchName }}</dd>
+      <dt>Service</dt>
+      <dd>{{ b.appointment.serviceTypeName }}</dd>
+      <dt>When</dt>
+      <dd>{{ b.appointment.start | zoned: b.appointment.timezone }}</dd>
+      <dt>Name</dt>
+      <dd>{{ b.appointment.customerName }}</dd>
+    </dl>
+    <p>
+      A confirmation has been sent to {{ maskedEmail() }} and by SMS
+      <span class="hint">(simulated in this demo)</span>. Keep your reference and the email you
+      used: you need both to change or cancel.
+    </p>
+  </section>
+  <div class="actions">
+    <a
+      class="btn primary"
+      routerLink="/manage"
+      [queryParams]="{ reference: b.appointment.reference }"
+    >
+      Manage this booking
+    </a>
+    <a class="btn secondary" routerLink="/book">Book another</a>
+  </div>
+} @else {
+  <h1>No booking to show</h1>
+  <p>
+    This page only appears right after you book. If you already have a booking, look it up with
+    your reference.
+  </p>
+  <div class="actions">
+    <a class="btn primary" routerLink="/manage">Find a booking</a>
+    <a class="btn secondary" routerLink="/book">Book an appointment</a>
+  </div>
+}
